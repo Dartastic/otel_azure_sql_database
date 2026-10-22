@@ -1,15 +1,16 @@
-// Licensed under the Dartastic Pro Software License Agreement.
+// Licensed under the Apache License, Version 2.0
 // Copyright 2025-2026 Mindful Software LLC d/b/a Dartastic.io, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 
 import 'otel_azure_sql_database_suppression.dart';
 
 const _tracerName = 'dartastic_otel_libs_azure_sql_database';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class AzureSqlDatabaseResult {
+  /// Creates a result.
   const AzureSqlDatabaseResult({
     this.server,
     this.database,
@@ -103,8 +104,13 @@ class AzureSqlDatabaseResult {
   final int? statusCode;
 }
 
+/// What a traced call returned: the value for the caller plus fields
+/// recorded on the span.
 class AzureSqlDatabaseCallResult<T> {
+  /// Creates a call result.
   const AzureSqlDatabaseCallResult({required this.value, this.result});
+
+  /// The value returned to the caller.
   final T value;
   final AzureSqlDatabaseResult? result;
 }
@@ -137,7 +143,7 @@ Future<T> tracedAzureSqlDatabase<T>({
   final span = _tracer().startSpan(
     'azure_sql_database $operation',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(m),
+    attributes: OTelAPI.attributesFromMap(m),
   );
   try {
     final r = await invoke();
@@ -145,130 +151,130 @@ Future<T> tracedAzureSqlDatabase<T>({
       final res = r.result!;
       final extras = <Attribute<Object>>[];
       if (res.server != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.server',
           res.server!,
         ));
       }
       if (res.database != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.database',
           res.database!,
         ));
       }
       if (res.deploymentKind != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.deployment.kind',
           res.deploymentKind!,
         ));
       }
       if (res.elasticPool != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.elastic_pool',
           res.elasticPool!,
         ));
       }
       if (res.sku != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.sku',
           res.sku!,
         ));
       }
       if (res.tier != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.tier',
           res.tier!,
         ));
       }
       if (res.maxSizeGb != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.max_size_gb',
           res.maxSizeGb!,
         ));
       }
       if (res.dtu != null) {
-        extras.add(OTel.attributeInt('azure_sql_database.dtu', res.dtu!));
+        extras.add(OTelAPI.attributeInt('azure_sql_database.dtu', res.dtu!));
       }
       if (res.vcores != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.vcores',
           res.vcores!,
         ));
       }
       if (res.replicaKind != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.replica.kind',
           res.replicaKind!,
         ));
       }
       if (res.geoReplicationState != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.geo_replication.state',
           res.geoReplicationState!,
         ));
       }
       if (res.statementKind != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.statement.kind',
           res.statementKind!,
         ));
       }
       if (res.rowCount != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.row_count',
           res.rowCount!,
         ));
       }
       if (res.affectedRowCount != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.affected_row_count',
           res.affectedRowCount!,
         ));
       }
       if (res.batchTextLength != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.batch_text_length',
           res.batchTextLength!,
         ));
       }
       if (res.cpuTimeMs != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.cpu_time_ms',
           res.cpuTimeMs!,
         ));
       }
       if (res.elapsedTimeMs != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.elapsed_time_ms',
           res.elapsedTimeMs!,
         ));
       }
       if (res.logicalReads != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.logical_reads',
           res.logicalReads!,
         ));
       }
       if (res.physicalReads != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.physical_reads',
           res.physicalReads!,
         ));
       }
       if (res.lockEscalations != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.lock_escalations',
           res.lockEscalations!,
         ));
       }
       if (res.connectionString != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.auth',
           res.connectionString!,
         ));
       }
       if (res.errorNumber != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.error.number',
           res.errorNumber!,
         ));
@@ -278,19 +284,19 @@ Future<T> tracedAzureSqlDatabase<T>({
         );
       }
       if (res.errorState != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_sql_database.error.state',
           res.errorState!,
         ));
       }
       if (res.errorMessage != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_sql_database.error.message',
           res.errorMessage!,
         ));
       }
       if (res.statusCode != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'http.response.status_code',
           res.statusCode!,
         ));
@@ -301,13 +307,13 @@ Future<T> tracedAzureSqlDatabase<T>({
           );
         }
       }
-      if (extras.isNotEmpty) span.addAttributes(OTel.attributes(extras));
+      if (extras.isNotEmpty) span.addAttributes(OTelAPI.attributes(extras));
     }
     return r.value;
   } catch (e, st) {
-    span.addAttributes(OTel.attributes([
-      OTel.attributeString(
-        ErrorResource.errorType.key,
+    span.addAttributes(OTelAPI.attributes([
+      OTelAPI.attributeString(
+        ErrorAttributes.errorType.key,
         e.runtimeType.toString(),
       ),
     ]));
